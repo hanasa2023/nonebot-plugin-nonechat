@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.9"
 
-      - run: uv install
+      - run: uv pip install
         shell: bash
 
       - name: Get Version
