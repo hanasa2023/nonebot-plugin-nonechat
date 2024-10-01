@@ -9,19 +9,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install poetry
-        run: pipx install poetry
+      - name: Install uv
+        run: pipx install uv
         shell: bash
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-          cache: "poetry"
 
-      - run: poetry install
+      - run: uv install
         shell: bash
 
       - name: Run Mypy
         shell: bash
         run: |
-          poetry run mypy ./nonebot_plugin_nonechat
+          uv run mypy ./nonebot_plugin_nonechat
