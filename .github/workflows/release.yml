@@ -14,14 +14,14 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install uv
-        run: pipx install uv
-        shell: bash
+        uses: astral-sh/setup-uv@v2
 
-      - uses: actions/setup-python@v4
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version-file: "pyproject.toml"
 
-      - run: uv pip install
+      - run: uv sync
         shell: bash
 
       - name: Get Version
