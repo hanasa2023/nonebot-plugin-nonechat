@@ -1,5 +1,3 @@
-import os
-
 from nonebot import on_message, require
 from nonebot.adapters import Event
 from nonebot.rule import to_me
@@ -11,11 +9,6 @@ require('nonebot_plugin_alconna')
 require('nonebot_plugin_htmlrender')
 from nonebot_plugin_alconna import UniMessage
 from nonebot_plugin_htmlrender import md_to_pic
-
-if plugin_config.nonechat_proxy is not None:
-    host, port = plugin_config.nonechat_proxy
-    os.environ['HTTP_PROXY'] = f'http://{host}:{port}'
-    os.environ['HTTPS_PROXY'] = f'https://{host}:{port}'
 
 chat = on_message(rule=to_me())
 

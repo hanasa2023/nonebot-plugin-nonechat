@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import aiosqlite
+import httpx
 from langchain_core.messages import (
     BaseMessage,
     HumanMessage,
@@ -18,10 +19,9 @@ from langgraph.graph.state import CompiledStateGraph
 from nonebot import logger
 from typing_extensions import Self
 
-from nonebot_plugin_nonechat.utils.parsers import MarkdownOutputParser
-
 from ..config import plugin_config
 from .constants import DATABASE_URL
+from .parsers import MarkdownOutputParser
 
 
 class ChatLLM:
@@ -35,12 +35,23 @@ class ChatLLM:
     def __init__(self) -> None:
         if not hasattr(self, 'initialized'):
             # 设置模型
+            if plugin_config.nonechat_proxy is not None:
+                host, port = plugin_config.nonechat_proxy
+                http_async_client = httpx.AsyncClient(
+                    proxies={
+                        'http_proxy': f'http://{host}:{port}',
+                        'https_proxy': f'https://{host}:{port}',
+                    }
+                )
+            else:
+                http_async_client = None
             self.llm: ChatOpenAI = ChatOpenAI(
                 model=plugin_config.nonechat_model,
                 api_key=plugin_config.nonechat_api_key,
                 base_url=plugin_config.nonechat_base_url,
                 temperature=plugin_config.nonechat_temperature,
                 timeout=plugin_config.nonechat_timeout,
+                http_async_client=http_async_client,
             )
             # 创建graph
             self.builder = StateGraph(MessagesState)
@@ -83,6 +94,8 @@ class ChatLLM:
         Returns:
             str: llm生成的输出
         """
+        # 确保存储数据库的父文件夹存在
+        DATABASE_URL.parent.mkdir(parents=True, exist_ok=True)
         async with aiosqlite.connect(DATABASE_URL) as conn:
             graph: CompiledStateGraph = self.builder.compile(AsyncSqliteSaver(conn))
             config: RunnableConfig = RunnableConfig(configurable={'thread_id': id})
