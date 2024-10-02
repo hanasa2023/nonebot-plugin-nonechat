@@ -3,7 +3,7 @@ from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 from .chat import chat
 from .config import Config
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __plugin_meta__ = PluginMetadata(
     name='nonechat',
     description='大语言模型的简单接入',
