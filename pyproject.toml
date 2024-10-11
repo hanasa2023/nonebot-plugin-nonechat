@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-nonechat"
-version = "0.1.1"
+version = "0.1.2"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9, <4.0"
