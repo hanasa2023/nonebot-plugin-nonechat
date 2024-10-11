@@ -10,7 +10,7 @@ class Config(BaseModel):
     """Plugin Config Here"""
 
     # 使用的模型
-    nonechat_model: str = ''
+    nonechat_model: str = 'glm-4-flash'
     # 相应的api_key
     nonechat_api_key: SecretStr = SecretStr('')
     # api接口地址
